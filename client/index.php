@@ -5,7 +5,7 @@
   <meta name="Author" content="">
   <meta name="Keywords" content="">
   <meta name="Description" content="">
-  <title>超女运维工具</title>
+  <title>运维工具</title>
 	<script src="js/jquery-1.11.2.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<style>
@@ -32,7 +32,7 @@
  </head>
  <body>
   <div id="top" style="margin-left:200px;margin-bottom:10px;float:center;width:1420px;height:50px;border:1px solid #A4D3EE">
-		<span style="margin-left:600px;">超级女声运维工具</span>
+		<span style="margin-left:600px;">运维工具</span>
 		<span style="color:#B23AEE;">&nbsp;&nbsp;&nbsp;&nbsp;TODO:权限;操作日志记录</span>
   </div>
 	<div id="left" class="left">
