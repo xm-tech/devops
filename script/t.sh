@@ -5,6 +5,10 @@ say(){
 	echo $1
 }
 
+get_ip(){
+    echo $1
+}
+
 cmd=$1
 
 case ${cmd} in
