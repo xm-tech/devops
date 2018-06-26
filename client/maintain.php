@@ -209,7 +209,7 @@
             alert("未选择服务器");
             return;
         }
-		if(confirm("确认要执行 "+sidtxt+" 的 superGirl_update.sql ?")){
+		if(confirm("确认要执行 "+sidtxt+" 的 demo_update.sql ?")){
 			var params={};
 			$.ajax({
 				type:"POST",
@@ -251,7 +251,7 @@
 		if (!$con){
 			die('Could not connect: ' . mysql_error());
   		}
-		mysql_select_db("supergirlserver", $con);
+		mysql_select_db("demoserver", $con);
 		$ret = mysql_query("SELECT * FROM t_server");
 		while($row=mysql_fetch_array($ret)){
 			echo "<option value=\"".$row['sid']."\">".$row['sname']."</option>";	
@@ -288,7 +288,7 @@
 <div class="button_div_style">
     <input type="button" class="button_style" value="db更新" onclick="update_db();"></input>
 </div>
-<div id="update_db_ret" class="ret_div_style">svn up superGirl_update.sql, if diff(ver) exec superGirl_update.sql</div>
+<div id="update_db_ret" class="ret_div_style">svn up demo_update.sql, if diff(ver) exec demo_update.sql</div>
 
 <div class="button_div_style">
     <input type="button" class="button_style" value="确认db已更新" onclick="confirm_update_db();"></input>

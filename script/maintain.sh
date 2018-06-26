@@ -8,19 +8,19 @@ backup_all_db(){
 	cd /exdisk/mysqlback/
 	find ./ -mtime +10 -name "*.sql.gz" -exec rm -rf {} \;
 
-	sids=$(/usr/local/mysql/bin/mysql -uroot -p'DFDF900((#$$roo@' -h127.0.0.1 -e "show databases;"|grep supergirl)
+	sids=$(/usr/local/mysql/bin/mysql -uroot -p'DFDF900' -h127.0.0.1 -e "show databases;"|grep demo)
 	for dbname in ${sids}
 	do
-    	/usr/local/mysql/bin/mysqldump -uroot -p'DFDF900((#$$roo@' -h127.0.0.1 ${dbname} | gzip > /exdisk/mysqlback/${dbname}_$(date +%Y-%m-%d-%H-%M).sql.gz
+    	/usr/local/mysql/bin/mysqldump -uroot -p'DFDF900' -h127.0.0.1 ${dbname} | gzip > /exdisk/mysqlback/${dbname}_$(date +%Y-%m-%d-%H-%M).sql.gz
 	done
-	
-	(su backup -c "/usr/bin/scp -P 3930 -o StrictHostKeyChecking=no /exdisk/mysqlback/supergirl_*_$(date +%Y-%m-%d-%H)* backup@10.25.234.86:/data/backup/${ip}/")
+
+	(su backup -c "/usr/bin/scp -P 3930 -o StrictHostKeyChecking=no /exdisk/mysqlback/demo_*_$(date +%Y-%m-%d-%H)* backup@10.25.234.86:/data/backup/${ip}/")
 
 }
 
 backup_one_db(){
-	dbname="supergirl_$1"
-	/usr/local/mysql/bin/mysqldump -uroot -p'DFDF900((#$$roo@' -h127.0.0.1 ${dbname} | gzip > /exdisk/mysqlback/${dbname}_$(date +%Y-%m-%d-%H-%M).sql.gz
+	dbname="demo_$1"
+	/usr/local/mysql/bin/mysqldump -uroot -p'DFDF900' -h127.0.0.1 ${dbname} | gzip > /exdisk/mysqlback/${dbname}_$(date +%Y-%m-%d-%H-%M).sql.gz
 	if [ $? -eq 0 ];then
 		echo "backup ${1}'s db succ"
 	else
@@ -31,36 +31,36 @@ backup_one_db(){
 update_one_server_code(){
 	sid="$1"
     cd /data/server/s${sid}/bin
-    oldsvnrev=$(svn info supergirl.jar|grep -e "Rev:"|awk -F':' '{print $2}'|sed s/[[:space:]]//g)
-    svnupret=$(svn up supergirl.jar)
-	newsvnrev=$(svn info supergirl.jar|grep -e "Rev:"|awk -F':' '{print $2}'|sed s/[[:space:]]//g)
+    oldsvnrev=$(svn info demo.jar|grep -e "Rev:"|awk -F':' '{print $2}'|sed s/[[:space:]]//g)
+    svnupret=$(svn up demo.jar)
+	newsvnrev=$(svn info demo.jar|grep -e "Rev:"|awk -F':' '{print $2}'|sed s/[[:space:]]//g)
 	# test
 	#oldsvnrev="54"
 	if [ "${oldsvnrev}" != "${newsvnrev}" ];then
-		changelist=$(svn diff supergirl.jar -c${newsvnrev} --summarize)
-		/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7^%x#2' -h10.168.79.161 supergirlserver -sse "UPDATE t_server SET codever=${newsvnrev},code_up_time=$(now) WHERE sid=${1}"
+		changelist=$(svn diff demo.jar -c${newsvnrev} --summarize)
+		/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7' -h10.168.79.161 demoserver -sse "UPDATE t_server SET codever=${newsvnrev},code_up_time=$(now) WHERE sid=${1}"
 		echo "oldver:${oldsvnrev},newver:${newsvnrev},changelist:${changelist}"
 	else
 		echo "no change"
-    fi 
-	chmod +x supergirl.jar
+    fi
+	chmod +x demo.jar
 }
 
 update_one_server_db(){
-	update_sql_file=/data/server/s${1}/bin/superGirl_update.sql
-	svn up ${update_sql_file} 2>&1 >/dev/null 
+	update_sql_file=/data/server/s${1}/bin/demo_update.sql
+	svn up ${update_sql_file} 2>&1 >/dev/null
 	if [ -s ${update_sql_file} ]; then
-		svn_ver_indb=$(/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7^%x#2' -h10.168.79.161 supergirlserver -sse "SELECT upsqlver FROM t_server WHERE sid=${1}")
+		svn_ver_indb=$(/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7' -h10.168.79.161 demoserver -sse "SELECT upsqlver FROM t_server WHERE sid=${1}")
 		svn_ver_local=$(svn info ${update_sql_file}|grep -e "Rev:"|awk -F':' '{print $2}'|sed s/[[:space:]]//g)
 		if [ "${svn_ver_local}" != "${svn_ver_indb}" ]; then
-			/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7^%x#2' -h10.168.79.161 supergirlserver -sse "UPDATE t_server SET upsqlver=${svn_ver_local},sql_up_time=$(now) WHERE sid=${1}" || die "update t_server fail, plz check"
-			/usr/local/mysql/bin/mysql -uroot -p'DFDF900((#$$roo@' -e "use supergirl_${1};source ${update_sql_file};" 2>&1 >/dev/null 
-			echo "${1} exec superGirl_update.sql succ, sqlver: ${svn_ver_local}";
+			/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7' -h10.168.79.161 demoserver -sse "UPDATE t_server SET upsqlver=${svn_ver_local},sql_up_time=$(now) WHERE sid=${1}" || die "update t_server fail, plz check"
+			/usr/local/mysql/bin/mysql -uroot -p'DFDF900((#$$roo@' -e "use demo_${1};source ${update_sql_file};" 2>&1 >/dev/null
+			echo "${1} exec demo_update.sql succ, sqlver: ${svn_ver_local}";
 		else
 			echo "no change"
-		fi	
+		fi
 	else
-		echo "no superGirl_update.sql, plz continue."
+		echo "no demo_update.sql, plz continue."
 	fi
 }
 
@@ -71,14 +71,14 @@ start_one_server(){
 	do
 		if [ ${sid} -eq ${id} ]; then
 			echo "${sid} is running"
-		    return	
+		    return
 		fi
 	done
 
 	cd /data/server/s${id}/bin && sh startup.sh &
 
 	if [ $? -eq 0 ]; then
-		/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7^%x#2' -h10.168.79.161 supergirlserver -e "update t_server set state=1 where sid=${id}"
+		/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7' -h10.168.79.161 demoserver -e "update t_server set state=1 where sid=${id}"
 		echo "${id} start succ"
 	else
 		echo "${id} start fail,plz check"
@@ -95,15 +95,15 @@ stop_one_server(){
         pid=$(echo ${pid_sid}|cut -d, -f1)
         #show "s${psid},${sid},${pid}"
         if [ "s${sid}" == "s${psid}" ]; then
-			sudo kill -15 ${pid} 
+			sudo kill -15 ${pid}
 			if [ $? -eq 0 ]; then
-				/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7^%x#2' -h10.168.79.161 supergirlserver -e "update t_server set state=0 where sid=${sid}" 
+				/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7' -h10.168.79.161 demoserver -e "update t_server set state=0 where sid=${sid}"
 			fi
 			sleep 1
 			break;
 		fi
     done
-	echo "${sid} stopped" 
+	echo "${sid} stopped"
 }
 
 confirm_one_server_stop(){
@@ -142,13 +142,13 @@ stop_one_server_now(){
         if [ "s${sid}" == "s${psid}" ]; then
             sudo kill -9 ${pid}
             if [ $? -eq 0 ]; then
-				/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7^%x#2' -h10.168.79.161 supergirlserver -e "update t_server set state=0 where sid=${sid}"
+				/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7' -h10.168.79.161 demoserver -e "update t_server set state=0 where sid=${sid}"
             fi
 			sleep 1
             break;
         fi
     done
-    echo "${sid} stopped" 
+    echo "${sid} stopped"
 }
 
 case "$1" in

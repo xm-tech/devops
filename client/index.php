@@ -41,7 +41,7 @@
         if (!$con){
             die('Could not connect: ' . mysql_error());
         }
-        mysql_select_db("supergirlserver", $con);
+        mysql_select_db("demoserver", $con);
         $ret = mysql_query("SELECT * FROM t_func ORDER BY `order` ASC");
         while($row=mysql_fetch_array($ret)){
             echo "<input type=\"button\" value=\"".$row['name']."\" class=\"oper\" onclick=\"getContent('".$row['cmd']."')\"></input>";

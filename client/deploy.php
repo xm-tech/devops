@@ -43,7 +43,7 @@
         if (!$con){
             die('Could not connect: ' . mysql_error());
         }
-        mysql_select_db("supergirlserver", $con);
+        mysql_select_db("demoserver", $con);
         $ret = mysql_query("SELECT * FROM t_machine where servernum < 5 and memoryAvailable > 6 and sizeExdiskFree > 30 order by servernum");
         while($row=mysql_fetch_array($ret)){
             echo "<option value=\"".$row['inip']."\">".$row['ip']."(区服个数".$row['servernum'].")</option>";
@@ -55,6 +55,6 @@
 	<input type="button" class="button_style" value="部署" onclick="deploy();"></input> 
 </div>
 <div>
-	<span style="color:red">&nbsp;&nbsp;加新服后需做的事：1:到114.55.67.83服更新支付服务器列表/data/www/supergirl/server.json</span>
+	<span style="color:red">&nbsp;&nbsp;加新服后需做的事：1:到114.55.67.83服更新支付服务器列表/data/www/demo/server.json</span>
 </div>
 <div id="deploy_server_ret" class="ret_div_style"></div>

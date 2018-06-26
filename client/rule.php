@@ -1,14 +1,14 @@
 <pre>
 开服流程：
 1.	运营确定开服时间
-2.	运营发布开服信息（游戏公告，更新SuperGirl_Update\notice文件，刷CDN）
+2.	运营发布开服信息（游戏公告，更新demo_Update\notice文件，刷CDN）
 3.	新媒体发布开服信息
 4.	客服QQ群发布开服信息
 5.	研发确定服务器及包
 6.	运维检查服务器状态，确定是否需要增加新的物理服务器
-7.	运维添加测试服务器列表SuperGirl_Update\test\serverlist.json，刷CDN
+7.	运维添加测试服务器列表demo_Update\test\serverlist.json，刷CDN
 8.	运营在测试环境测试新服功能
-9.	运维添加服务器至线上环境，更新服务器列表SuperGirl_Update\ios（Android），刷CDN，添加白名单
+9.	运维添加服务器至线上环境，更新服务器列表demo_Update\ios（Android），刷CDN，添加白名单
 10.	运维添加运营后台工具服务器列表
 11.	运营设置活动时间
 12.	运营测试线上新服充值（IOS，安卓1-3个渠道），新服活动
@@ -16,11 +16,11 @@
 
 小版本更新：
 1.	研发提供稳定新包
-2.	运维更新到测试环境SuperGirl_Update\test，刷CDN
+2.	运维更新到测试环境demo_Update\test，刷CDN
 3.	运营测试环境测试功能（不通过则当周不进行更新）
 4.	运营决定更新时间
 5.	新媒体进行版本预热
-6.	运营发布更新公告，（游戏公告，更新SuperGirl_Update\notice文件，刷CDN）
+6.	运营发布更新公告，（游戏公告，更新demo_Update\notice文件，刷CDN）
 7.	运营在停服维护前15分钟发游戏跑马灯提示玩家下线
 8.	运维在指定时间停服维护，上更新包，刷CND
 9.	运维开1个服并设置白名单

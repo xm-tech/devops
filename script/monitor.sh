@@ -12,7 +12,7 @@ main(){
 		runing_sids=`ps axu|grep java|grep -v cloudmonitor|grep -v jmxremote|grep -v grep|awk -F'sid=' '{print $2}'`
 
 		conf_sids_sql="SELECT sid FROM t_server WHERE state=1 and inip = '${inip}'"
-		conf_sids=$(/usr/local/mysql/bin/mysql -uppgames -p'IDFS(7^%x#2' -h121.40.207.204 supergirlserver -sse "${conf_sids_sql}")
+		conf_sids=$(/usr/local/mysql/bin/mysql -uppgames -p'123456' -hx.x.x.x demoserver -sse "${conf_sids_sql}")
 
 		for csid in ${conf_sids};do
     		# assume not running
@@ -26,7 +26,7 @@ main(){
 
 			if [ ${runing} -eq 0 ];then
 				cd /data/server/s${csid}/bin
-				#echo "start ${csid} ... " 
+				#echo "start ${csid} ... "
 				sh startup.sh &
 			fi
 		done
@@ -45,10 +45,10 @@ main(){
 				fi
 			done
 			if [ ${should_run} -eq 0 ]; then
-				# should not run, stop it	
+				# should not run, stop it
 				kill -15 ${_pid} &
 			fi
-		done		
+		done
 
 		sleep $1
 	done

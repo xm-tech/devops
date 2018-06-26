@@ -12,11 +12,11 @@ $db->query("set names utf8");
 
 $db1_host   = "10.168.79.161";
 // database name
-$db1_name   = "supergirlserver";
+$db1_name   = "demoserver";
 // database username
 $db1_user   = "ppgames";
 // database password
-$db1_pass   = "IDFS(7^%x#2";
+$db1_pass   = "IDFS(7";
 
 $db1 = new PDO('mysql:host='.$db1_host.';dbname='.$db1_name,$db1_user,$db1_pass);
 $db1->query("set names utf8");
